@@ -11,7 +11,7 @@ public class Main {
         String local = "src/data/3x3";
 
         //DATA
-        imageProcessor(size, local);
+        int[] data = imageProcessor(size, local);
 
         int[][] data1 = {
                 {1,1,2},
