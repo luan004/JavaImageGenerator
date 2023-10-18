@@ -84,7 +84,20 @@ public class Main {
 
                         // IMAGE SIZE IS VALID?
                         if (image != null && image.getWidth() == size && image.getHeight() == size) {
-                            // O ARQUIVO É VÁLIDO   
+                            // O ARQUIVO É VÁLIDO
+
+                            String[][] processedImage = new String[size][size];
+
+                            for (int y = 0; y < size; y++) {
+                                for (int x = 0; x < size; x++) {
+                                    // Obtém a cor em RGB como uma string
+                                    String rgbString = getColor(image.getRGB(x, y));
+
+                                    // Armazena a cor no array
+                                    processedImage[y][x] = rgbString;
+                                }
+                            }
+
                         } else {
                             System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
                         }
@@ -100,5 +113,13 @@ public class Main {
         }
 
         return new int[]{0};
+    }
+
+    static String getColor(int rgb) {
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+
+        return red + "," + green + "," + blue;
     }
 }
