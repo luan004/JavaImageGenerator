@@ -1,4 +1,7 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -68,7 +71,30 @@ public class Main {
         File path = new File(System.getProperty("user.dir") + File.separator + local);
 
         if (path.isDirectory()) {
+            File[] files = path.listFiles();
 
+            // FOR EACH FILE
+            for (File file: files) {
+                // IS A JPG IMAGE?
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".jpg")) {
+
+                    // READ IMAGE
+                    try {
+                        BufferedImage image = ImageIO.read(file);
+
+                        // IMAGE SIZE IS VALID?
+                        if (image.getWidth() == size && image.getHeight() == size) {
+
+                        } else {
+                            System.err.println("A imagem '" + file.getName() + "' não tem tamanho " + size + "x" + size);
+                        }
+                    } catch (IOException e) {
+                        System.out.println("Houve um problema ao tentar ler a imagem '" + file.getName());
+                    }
+                } else {
+                    System.err.println("O arquivo '" + file.getName() + "' não é uma imagem jpg");
+                }
+            }
         } else {
             System.err.println("Diretório não encontrado: " + path);
         }
