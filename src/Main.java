@@ -83,10 +83,10 @@ public class Main {
                         BufferedImage image = ImageIO.read(file);
 
                         // IMAGE SIZE IS VALID?
-                        if (image.getWidth() == size && image.getHeight() == size) {
-
+                        if (image != null && image.getWidth() == size && image.getHeight() == size) {
+                            // O ARQUIVO É VÁLIDO
                         } else {
-                            System.err.println("A imagem '" + file.getName() + "' não tem tamanho " + size + "x" + size);
+                            System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
                         }
                     } catch (IOException e) {
                         System.out.println("Houve um problema ao tentar ler a imagem '" + file.getName());
