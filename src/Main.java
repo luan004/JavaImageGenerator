@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
         //PARAMS
         int size = 3;
-        String local = "data/3x3";
+        String local = "src/data/3x3";
 
         //DATA
         imageProcessor(size, local);
@@ -65,13 +65,12 @@ public class Main {
 
     static int[] imageProcessor(int size, String local) {
         // FOLDER PATH
-        File path = new File(System.getProperty("user.dir") + File.separator + "data/3x3");
-        System.out.println(path);
+        File path = new File(System.getProperty("user.dir") + File.separator + local);
 
         if (path.isDirectory()) {
 
         } else {
-            System.err.println("Erro ao acessar o diretório: " + path);
+            System.err.println("Diretório não encontrado: " + path);
         }
 
         return new int[]{0};
