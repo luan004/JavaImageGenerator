@@ -84,7 +84,7 @@ public class Main {
 
                         // IMAGE SIZE IS VALID?
                         if (image != null && image.getWidth() == size && image.getHeight() == size) {
-                            // O ARQUIVO É VÁLIDO
+                            // O ARQUIVO É VÁLIDO   
                         } else {
                             System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
                         }
