@@ -1,6 +1,14 @@
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) {
+        //PARAMS
+        int size = 3;
+        String local = "data/3x3";
+
         //DATA
+        imageProcessor(size, local);
+
         int[][] data1 = {
                 {1,1,2},
                 {2,2,2},
@@ -14,7 +22,7 @@ public class Main {
         };
 
         // result
-        int[][] res = new int[3][3];
+        int[][] res = new int[size][size];
 
         for (int i = 0; i < res.length; i++) {
             for (int o = 0; o < res[0].length; o++) {
@@ -53,5 +61,19 @@ public class Main {
             plus = plus + color;
         }
         return plus / colors.length;
+    }
+
+    static int[] imageProcessor(int size, String local) {
+        // FOLDER PATH
+        File path = new File(System.getProperty("user.dir") + File.separator + "data/3x3");
+        System.out.println(path);
+
+        if (path.isDirectory()) {
+
+        } else {
+            System.err.println("Erro ao acessar o diretório: " + path);
+        }
+
+        return new int[]{0};
     }
 }
