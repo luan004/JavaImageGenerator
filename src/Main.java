@@ -13,8 +13,7 @@ public class Main {
         //DATA
         ArrayList<int[][]> data = imageProcessor(size, local);
 
-        System.out.println((-16764837 + -1237980) / 2);
-        System.out.println(getColor(-9001408));
+        System.out.println(colorMix(new int[]{-1237980,-16764837}));
 
         int[][] data1 = {
                 {1,1,2},
@@ -130,7 +129,7 @@ public class Main {
         return red + "," + green + "," + blue;
     }
 
-    static int colorMix(int[] pixelsColor) {
+    static String colorMix(int[] pixelsColor) {
         int r = 0;
         int g = 0;
         int b = 0;
@@ -147,6 +146,6 @@ public class Main {
         g = g/l;
         b = b/l;
 
-        return (r << 16) | (g << 8) | b;
+        return r + "," + g + "," + b;
     }
 }
