@@ -13,8 +13,6 @@ public class Main {
         //DATA
         ArrayList<int[][]> data = imageProcessor(size, local);
 
-        System.out.println(colorMix(new int[]{-1237980,-16764837}));
-
         int[][] data1 = {
                 {1,1,2},
                 {2,2,2},
@@ -30,10 +28,17 @@ public class Main {
         // result
         int[][] res = new int[size][size];
 
-        for (int i = 0; i < res.length; i++) {
-            for (int o = 0; o < res[0].length; o++) {
-                int[] colors = {data1[i][o], data2[i][o]};
-                res[i][o] = calcColor(colors);
+        for (int y = 0; y < res.length; y++) {
+            for (int x = 0; x < res[0].length; x++) {
+                // DATA
+                ArrayList<Integer> pixels = new ArrayList<>();
+
+                for (int[][] image: data) {
+                    int val = image[y][x];
+;                    pixels.add(val);
+                }
+
+                res[y][x] = colorMix(pixels);
             }
         }
 
@@ -46,27 +51,10 @@ public class Main {
             //EIXO X
             System.out.print(" | ");
             for (int o = 0; o < mat[0].length; o++) {
-                //System.out.println("M" + (i+1) + "," + (o+1) + " = " + mat[i][o]);
-                System.out.print(mat[i][o] + " | ");
+                System.out.print(decodeRGB(mat[i][o]) + " | ");
             }
             System.out.println();
         }
-    }
-
-    static int calcColor(int[] colors) {
-        // 1 - blue
-        // 2 - light blue
-        // 3 - green
-        // 4 - palha
-        // 5 - yellow
-        // 6 - orange
-        // 7 - red
-
-        int plus = 0;
-        for (int color : colors) {
-            plus = plus + color;
-        }
-        return plus / colors.length;
     }
 
     static ArrayList<int[][]> imageProcessor(int size, String local) {
@@ -102,7 +90,6 @@ public class Main {
                             }
 
                             processedImages.add(processedImage);
-                            print(processedImage);
 
                         } else {
                             System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
@@ -121,15 +108,7 @@ public class Main {
         return processedImages;
     }
 
-    static String getColor(int rgb) {
-        int red = (rgb >> 16) & 0xFF;
-        int green = (rgb >> 8) & 0xFF;
-        int blue = rgb & 0xFF;
-
-        return red + "," + green + "," + blue;
-    }
-
-    static String colorMix(int[] pixelsColor) {
+    static int colorMix(ArrayList<Integer> pixelsColor) {
         int r = 0;
         int g = 0;
         int b = 0;
@@ -140,12 +119,20 @@ public class Main {
             b = b + (rgb & 0xFF);
         }
 
-        int l = pixelsColor.length;
+        int l = pixelsColor.toArray().length;
 
         r = r/l;
         g = g/l;
         b = b/l;
 
-        return r + "," + g + "," + b;
+        return (r << 16) | (g << 8) | b;
+    }
+
+    static String decodeRGB(int rgb) {
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+
+        return red + "," + green + "," + blue;
     }
 }
