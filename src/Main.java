@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         //PARAMS
-        int size = 3;
+        int size = 5;
         String local = "src/data/3x3";
 
         //DATA
@@ -93,6 +93,7 @@ public class Main {
 
                         } else {
                             System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
+                            System.exit(0);
                         }
                     } catch (IOException e) {
                         System.out.println("Houve um problema ao tentar ler a imagem '" + file.getName());
