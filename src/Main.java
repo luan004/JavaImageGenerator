@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         //PARAMS
         int size = 512; // Tamanho da imagem
-        String local = "src/data/"+size+"x"+size; // Pasta de imagens
+        String local = "src/data/"+size+"x"+size; // Pasta das imagens de entrada
         int tol = 80; // Valor da tolerância de  similaridade entre cores
 
         //DATA
