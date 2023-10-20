@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         //PARAMS
-        int size = 3;
-        String local = "src/data/3x3";
+        int size = 16;
+        String local = "src/data/"+size+"x"+size;
 
         //DATA
         ArrayList<int[][]> data = imageProcessor(size, local);
@@ -43,6 +43,11 @@ public class Main {
         if (path.isDirectory()) {
             File[] files = path.listFiles();
 
+            if (files.length == 0) {
+                System.err.println("A pasta " + path.getName() + " está vazia");
+                System.exit(0);
+            }
+
             // FOR EACH FILE
             assert files != null;
             for (File file: files) {
@@ -74,13 +79,16 @@ public class Main {
                         }
                     } catch (IOException e) {
                         System.out.println("Houve um problema ao tentar ler a imagem '" + file.getName());
+                        System.exit(0);
                     }
                 } else {
                     System.err.println("O arquivo '" + file.getName() + "' não é uma imagem jpg");
+                    System.exit(0);
                 }
             }
         } else {
             System.err.println("Diretório não encontrado: " + path);
+            System.exit(0);
         }
 
         return processedImages;
