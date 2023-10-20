@@ -2,13 +2,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         //PARAMS
-        int size = 16;
-        String local = "src/data/"+size+"x"+size;
+        int size = 512; // Tamanho da imagem
+        String local = "src/data/"+size+"x"+size; // Pasta de imagens
+        int tol = 80; // Valor da tolerância de  similaridade entre cores
 
         //DATA
         ArrayList<int[][]> data = imageProcessor(size, local);
@@ -17,14 +18,44 @@ public class Main {
         int[][] res = new int[size][size];
 
         for (int y = 0; y < res.length; y++) {
+//            for (int x = 0; x < res[0].length; x++) {
+//                // DATA
+//                ArrayList<Integer> pixels = new ArrayList<>();
+//
+//                for (int[][] image: data) {
+//                    int val = image[y][x];
+//;                    pixels.add(val);
+//                }
+//
+//                res[y][x] = colorMix(pixels);
+//            }
+
+
             for (int x = 0; x < res[0].length; x++) {
-                // DATA
+
+                // O seleciona qual o tom de cor mais comum em determinado pixel
+                // de cada imagem, após isso, monta um array que guarda apenas as
+                // cores semelhantes e cria uma nova cor que equivale a cor média
+                // das cores no array, essa cor média será usado para colorir o
+                // pixel da imagem gerada.
+
                 ArrayList<Integer> pixels = new ArrayList<>();
 
-                for (int[][] image: data) {
+                // Contador para contar as ocorrências de cada cor
+                HashMap<Integer, Integer> colorCounts = new HashMap<>();
+
+                for (int[][] image : data) {
                     int val = image[y][x];
-;                    pixels.add(val);
+
+                    // Incrementa o contador para esta cor
+                    colorCounts.put(val, colorCounts.getOrDefault(val, 0) + 1);
                 }
+
+                // Encontra a cor predominante considerando uma tolerância
+                int predominante = findPredominantColor(colorCounts, tol);
+
+                // Adiciona apenas a cor predominante ao array
+                pixels.add(predominante);
 
                 res[y][x] = colorMix(pixels);
             }
@@ -32,6 +63,43 @@ public class Main {
 
         //print(res);
         createImage(size, res);
+    }
+
+    private static int findPredominantColor(HashMap<Integer, Integer> colorCounts, int tol) {
+        // Ordena as cores pelo número de ocorrências
+        List<Map.Entry<Integer, Integer>> sortedColors = new ArrayList<>(colorCounts.entrySet());
+        sortedColors.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        // Verifica se há cores suficientemente próximas para serem consideradas iguais
+        for (int i = 0; i < sortedColors.size() - 1; i++) {
+            int color1 = sortedColors.get(i).getKey();
+
+            for (int j = i + 1; j < sortedColors.size(); j++) {
+                int color2 = sortedColors.get(j).getKey();
+
+                if (colorDistance(color1, color2) <= tol) {
+                    // Se as cores são suficientemente próximas, considera como uma única cor
+                    return color1;
+                }
+            }
+        }
+
+        // Se não encontrou cores próximas, retorna a cor com mais ocorrências
+        return sortedColors.get(0).getKey();
+    }
+
+    // Função para calcular a diferença entre duas cores
+    private static int colorDistance(int color1, int color2) {
+        int r1 = (color1 >> 16) & 0xFF;
+        int g1 = (color1 >> 8) & 0xFF;
+        int b1 = color1 & 0xFF;
+
+        int r2 = (color2 >> 16) & 0xFF;
+        int g2 = (color2 >> 8) & 0xFF;
+        int b2 = color2 & 0xFF;
+
+        // Distância Euclidiana entre as cores nos canais RGB
+        return (int) Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
     }
 
     static ArrayList<int[][]> imageProcessor(int size, String local) {
