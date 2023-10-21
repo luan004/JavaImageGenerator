@@ -7,9 +7,12 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         //PARAMS
-        int size = 512; // Tamanho da imagem
-        String local = "src/data/"+size+"x"+size; // Pasta das imagens de entrada
-        int tol = 80; // Valor da tolerância de  similaridade entre cores
+        boolean type = true; // true = gen; false = overlay
+        int size = 1024; // Tamanho da imagem
+        String local = "src/data/tdne"; // Pasta das imagens de entrada
+
+        int tol = 100; // Valor da tolerância de  similaridade entre cores
+        int weight = 1;
 
         //DATA
         ArrayList<int[][]> data = imageProcessor(size, local);
@@ -17,52 +20,71 @@ public class Main {
         // result
         int[][] res = new int[size][size];
 
-        for (int y = 0; y < res.length; y++) {
-//            for (int x = 0; x < res[0].length; x++) {
-//                // DATA
-//                ArrayList<Integer> pixels = new ArrayList<>();
-//
-//                for (int[][] image: data) {
-//                    int val = image[y][x];
-//;                    pixels.add(val);
-//                }
-//
-//                res[y][x] = colorMix(pixels);
-//            }
+        if (type == true) {
+            for (int y = 0; y < res.length; y++) {
+                for (int x = 0; x < res[0].length; x++) {
 
+                    // O seleciona qual o tom de cor mais comum em determinado pixel
+                    // de cada imagem, após isso, monta um array que guarda apenas as
+                    // cores semelhantes e cria uma nova cor que equivale a cor média
+                    // das cores no array, essa cor média será usado para colorir o
+                    // pixel da imagem gerada.
 
-            for (int x = 0; x < res[0].length; x++) {
+                    ArrayList<Integer> pixels = new ArrayList<>();
 
-                // O seleciona qual o tom de cor mais comum em determinado pixel
-                // de cada imagem, após isso, monta um array que guarda apenas as
-                // cores semelhantes e cria uma nova cor que equivale a cor média
-                // das cores no array, essa cor média será usado para colorir o
-                // pixel da imagem gerada.
+                    // Contador para contar as ocorrências de cada cor
+                    HashMap<Integer, Integer> colorCounts = new HashMap<>();
 
-                ArrayList<Integer> pixels = new ArrayList<>();
+                    for (int[][] image : data) {
+                        int val = image[y][x];
 
-                // Contador para contar as ocorrências de cada cor
-                HashMap<Integer, Integer> colorCounts = new HashMap<>();
+                        // Incrementa o contador para esta cor
+                        colorCounts.put(val, colorCounts.getOrDefault(val, 0) + 1);
+                    }
 
-                for (int[][] image : data) {
-                    int val = image[y][x];
+                    // Encontra a cor predominante considerando uma tolerância
+                    int predominante = findPredominantColor(colorCounts, tol);
 
-                    // Incrementa o contador para esta cor
-                    colorCounts.put(val, colorCounts.getOrDefault(val, 0) + 1);
+                    // Adiciona apenas a cor predominante ao array
+                    pixels.add(predominante);
+
+                    if (y > 0) {
+                        for (int i = 0; i < weight; i++) {
+                            pixels.add(res[y - 1][x]);
+                        }
+                    }
+                    if (x > 0) {
+                        for (int i = 0; i < weight; i++) {
+                            pixels.add(res[y][x - 1]);
+                        }
+                    }
+                    if (x > 0 && y > 0) {
+                        for (int i = 0; i < weight; i++) {
+                            pixels.add(res[y-1][x-1]);
+                        }
+                    }
+
+                    res[y][x] = colorMix(pixels);
                 }
+            }
+        } else {
+            for (int y = 0; y < res.length; y++) {
+                for (int x = 0; x < res[0].length; x++) {
+                    // DATA
+                    ArrayList<Integer> pixels = new ArrayList<>();
 
-                // Encontra a cor predominante considerando uma tolerância
-                int predominante = findPredominantColor(colorCounts, tol);
+                    for (int[][] image: data) {
+                        int val = image[y][x];
+                        pixels.add(val);
+                    }
 
-                // Adiciona apenas a cor predominante ao array
-                pixels.add(predominante);
-
-                res[y][x] = colorMix(pixels);
+                    res[y][x] = colorMix(pixels);
+                }
             }
         }
 
         //print(res);
-        createImage(size, res);
+        createImage(size, res, tol);
     }
 
     private static int findPredominantColor(HashMap<Integer, Integer> colorCounts, int tol) {
@@ -120,7 +142,7 @@ public class Main {
             assert files != null;
             for (File file: files) {
                 // IS A JPG IMAGE?
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".jpg")) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".jpeg")) {
 
                     // READ IMAGE
                     try {
@@ -182,7 +204,7 @@ public class Main {
         return (r << 16) | (g << 8) | b;
     }
 
-    static void createImage(int size, int[][] pixels) {
+    static void createImage(int size, int[][] pixels, int tol) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < size; y++) {
@@ -192,7 +214,8 @@ public class Main {
             }
         }
         long timestamp = System.currentTimeMillis();
-        File output = new File("src/output/" + timestamp + ".jpg");
+        File output = new File("src/output/" + tol + "-" + timestamp + ".j" +
+                "pg");
         try {
             ImageIO.write(image, "jpg", output);
             System.out.println("Imagem gerada com sucesso: " + output.getAbsolutePath());
