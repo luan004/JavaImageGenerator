@@ -1,3 +1,7 @@
+### Data ###
+src/data
+src/output
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
