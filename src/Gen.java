@@ -1,9 +1,8 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Gen {
     public static void start(int size, String in, String out) {
@@ -68,6 +67,36 @@ public class Gen {
                 // DATA
                 ArrayList<Integer> pixels = new ArrayList<>();
 
+                // Contador para contar as ocorrências de cada cor
+                HashMap<Integer, Integer> colorCounts = new HashMap<>();
+
+                for (int[][] image : data) {
+                    int val = image[y][x];
+
+                    // Incrementa o contador para esta cor
+                    colorCounts.put(val, colorCounts.getOrDefault(val, 0) + 1);
+                }
+
+                // Encontra a cor predominante
+                int predominante = Collections.max(colorCounts.entrySet(), Map.Entry.comparingByValue()).getKey();
+
+                // Adiciona apenas a cor predominante ao array
+                pixels.add(predominante);
+
+                output[y][x] = colorMix(pixels);
+            }
+        }
+
+        createImage(output, size);
+    }
+    private static void overlay(int size, ArrayList<int[][]> data) {
+        int[][] output = new int[size][size];
+
+        for (int y = 0; y < output.length; y++) {
+            for (int x = 0; x < output[0].length; x++) {
+                // DATA
+                ArrayList<Integer> pixels = new ArrayList<>();
+
                 for (var image: data) {
                     int val = image[y][x];
                     pixels.add(val);
@@ -90,7 +119,7 @@ public class Gen {
             b = b + (rgb & 0xFF);
         }
 
-        int l = pixelsColor.toArray().length;
+        int l = pixelsColor.size();
 
         r = r/l;
         g = g/l;
@@ -107,6 +136,7 @@ public class Gen {
                 image.setRGB(x, y, rgb);
             }
         }
+
         long timestamp = System.currentTimeMillis();
         File outputFile = new File("src/output/" + timestamp + ".jpg");
         try {
@@ -115,5 +145,41 @@ public class Gen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static int colorDistance(int color1, int color2) {
+        int r1 = (color1 >> 16) & 0xFF;
+        int g1 = (color1 >> 8) & 0xFF;
+        int b1 = color1 & 0xFF;
+
+        int r2 = (color2 >> 16) & 0xFF;
+        int g2 = (color2 >> 8) & 0xFF;
+        int b2 = color2 & 0xFF;
+
+        // Distância Euclidiana entre as cores nos canais RGB
+        return (int) Math.sqrt(Math.pow(r1 - r2, 2) + Math.pow(g1 - g2, 2) + Math.pow(b1 - b2, 2));
+    }
+    private static int findPredominantColor(HashMap<Integer, Integer> colorCounts, int tol) {
+        // Ordena as cores pelo número de ocorrências
+        List<Map.Entry<Integer, Integer>> sortedColors = new ArrayList<>(colorCounts.entrySet());
+        sortedColors.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        // Verifica se há cores suficientemente próximas para serem consideradas iguais
+        for (int i = 0; i < sortedColors.size() - 1; i++) {
+            int color1 = sortedColors.get(i).getKey();
+
+            for (int j = i + 1; j < sortedColors.size(); j++) {
+                int color2 = sortedColors.get(j).getKey();
+
+                System.out.println(colorDistance(color1, color2));
+                if (colorDistance(color1, color2) <= tol) {
+                    // Se as cores são suficientemente próximas, considera como uma única cor
+                    return color1;
+                }
+            }
+        }
+
+        // Se não encontrou cores próximas, retorna a cor com mais ocorrências
+        return sortedColors.get(0).getKey();
     }
 }
