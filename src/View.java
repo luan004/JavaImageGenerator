@@ -4,20 +4,28 @@ import java.awt.*;
 public class View {
     public static void view() {
         JFrame frame = new JFrame("Java Image Generator");
-        frame.setSize(800,500);
+        frame.setSize(800, 500);
 
         // LATERAL PANEL
-        JPanel column = new JPanel(new GridLayout(3, 1));
+        JPanel panel = new JPanel();
+        BoxLayout box = new BoxLayout(panel, BoxLayout.Y_AXIS);  // Correção aqui
+        panel.setLayout(box);
 
-        column.add(new JLabel("Dataset:"));
-        column.add(new JTextField());
+        panel.add(new JLabel("Dataset:"));
+        panel.add(new JTextField());
 
-        column.add(new JLabel("Output:"));
-        column.add(new JTextField());
+        panel.add(new JLabel("Output:"));
+        panel.add(new JTextField());
 
-        column.add(new JButton("Generate"));
+        panel.add(new JLabel("Round:"));
+        panel.add(new JSpinner(new SpinnerNumberModel(15, 0, 255, 1)));
 
-        frame.add(column, BorderLayout.WEST);
+        panel.add(new JLabel("Image Count:"));
+        panel.add(new JSpinner(new SpinnerNumberModel(1, 1, 5, 1)));
+
+        panel.add(new JButton("Generate"));
+
+        frame.add(panel, BorderLayout.WEST);
 
         // IMAGE
 

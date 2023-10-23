@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         View.view();
+        //MinhaInterface.start();
         String in = "src/data/cars";
         String out = "src/output";
         String type = "newgen"; // overlay - gen - gen1
