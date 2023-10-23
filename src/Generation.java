@@ -4,6 +4,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Generation {
+    static void newgen(int size, ArrayList<int[][]> data, int round) {
+        int[][] output = new int[size][size];
+
+        for (int y = 0; y < output.length; y++) {
+            for (int x = 0; x < output[0].length; x++) {
+
+                ArrayList<Integer> pixels = new ArrayList<>();
+                ArrayList<Integer> pixels2 = new ArrayList<>();
+
+                for (var image: data) {
+                    pixels.add(image[y][x]);
+                    pixels2.add(Util.roundColor(image[y][x], round));
+                }
+
+                int predominant = Util.getPredominantColor(pixels2);
+
+                output[y][x] = predominant;
+            }
+        }
+
+        Files.createImage(output, size);
+    }
     static void gen(int size, ArrayList<int[][]> data) {
         int[][] output = new int[size][size];
 
@@ -25,6 +47,7 @@ public class Generation {
                 // Encontra a cor predominante
                 int predominante = Collections.max(colorCounts.entrySet(), Map.Entry.comparingByValue()).getKey();
 
+
                 // Adiciona apenas a cor predominante ao array
                 pixels.add(predominante);
 
@@ -39,7 +62,6 @@ public class Generation {
 
         for (int y = 0; y < output.length; y++) {
             for (int x = 0; x < output[0].length; x++) {
-                // DATA
                 ArrayList<Integer> pixels = new ArrayList<>();
 
                 for (var image: data) {

@@ -45,7 +45,6 @@ public class Util {
             for (int j = i + 1; j < sortedColors.size(); j++) {
                 int color2 = sortedColors.get(j).getKey();
 
-                System.out.println(colorDistance(color1, color2));
                 if (colorDistance(color1, color2) <= tol) {
                     // Se as cores são suficientemente próximas, considera como uma única cor
                     return color1;
@@ -55,5 +54,62 @@ public class Util {
 
         // Se não encontrou cores próximas, retorna a cor com mais ocorrências
         return sortedColors.get(0).getKey();
+    }
+
+    static String decodeRGB(int rgb) {
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+
+        return red + "," + green + "," + blue;
+    }
+    static int encodeRGB(int r, int g, int b) {
+        return (r << 16) | (g << 8) | b;
+    }
+    static int roundColor(int rgb, int round) {
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = rgb & 0xFF;
+
+        r = Math.round((float) r / round) * round;
+        g = Math.round((float) g / round) * round;
+        b = Math.round((float) b / round) * round;
+
+        if (r > 255) {
+            r = 255;
+        }
+
+        if (g > 255) {
+            g = 255;
+        }
+
+        if (b > 255) {
+            b = 255;
+        }
+
+        return (r << 16) | (g << 8) | b;
+    }
+
+    static Integer getPredominantColor(ArrayList<Integer> pixels) {
+        Map<Integer, Integer> count = new HashMap<>();
+
+        for (Integer valor : pixels) {
+            count.put(valor, count.getOrDefault(valor, 0) + 1);
+        }
+
+        int maxCount = Collections.max(count.values());
+//        long tied = count.values().stream().filter(v -> v == maxCount).count();
+//
+//        if (tied > 1) {
+//            // Tied
+//            return 0;
+//        }
+
+        return count.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == maxCount)
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 }
