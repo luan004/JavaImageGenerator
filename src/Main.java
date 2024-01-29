@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+// v1.0
+
 public class Main {
     public static void main(String[] args) {
         View.view();
