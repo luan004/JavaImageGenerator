@@ -1,34 +1,35 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class View {
-    public static void view() {
-        JFrame frame = new JFrame("Java Image Generator");
-        frame.setSize(800, 500);
+public class View{
+    private JTextField input = new JTextField("src/data/cars");
+    private JTextField output = new JTextField("src/output");
+    private JComboBox<String> gentype = new JComboBox<>(new String[] {"newgen", "overlay", "gen"});
+    private JSpinner imgsize = new JSpinner(new SpinnerNumberModel(1024, 0, 4096, 1));
+    private JSpinner round = new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));
+    private JSpinner inputCount = new JSpinner(new SpinnerNumberModel(4, 1, 10, 1));
+    private JSpinner outputCount = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
 
-        // LATERAL PANEL
-        JPanel panel = new JPanel();
-        BoxLayout box = new BoxLayout(panel, BoxLayout.Y_AXIS);  // Correção aqui
-        panel.setLayout(box);
-
-        panel.add(new JLabel("Dataset:"));
-        panel.add(new JTextField());
-
-        panel.add(new JLabel("Output:"));
-        panel.add(new JTextField());
-
-        panel.add(new JLabel("Round:"));
-        panel.add(new JSpinner(new SpinnerNumberModel(15, 0, 255, 1)));
-
-        panel.add(new JLabel("Image Count:"));
-        panel.add(new JSpinner(new SpinnerNumberModel(1, 1, 5, 1)));
-
-        panel.add(new JButton("Generate"));
-
-        frame.add(panel, BorderLayout.WEST);
-
-        // IMAGE
-
-        frame.setVisible(true);
+    // GETTERS
+    public JTextField getInput() {
+        return input;
+    }
+    public JTextField getOutput() {
+        return output;
+    }
+    public JComboBox<String> getGentype() {
+        return gentype;
+    }
+    public JSpinner getImgsize() {
+        return imgsize;
+    }
+    public JSpinner getRound() {
+        return round;
+    }
+    public JSpinner getInputCount() {
+        return inputCount;
+    }
+    public JSpinner getOutputCount() {
+        return outputCount;
     }
 }

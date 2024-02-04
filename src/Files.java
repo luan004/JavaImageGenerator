@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Files {
-    static void createImage(int[][] output, int size) {
+    static File createImage(int[][] output, int size) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < size; y++) {
@@ -19,13 +19,15 @@ public class Files {
         }
 
         long timestamp = System.currentTimeMillis();
-        File outputFile = new File("src/output/" + timestamp + ".jpg");
+        File outputFile = new File("src/output/-" + timestamp + ".jpg");
         try {
             ImageIO.write(image, "jpg", outputFile);
-            System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
+            //System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return outputFile;
     }
 
     static ArrayList<int[][]> dataProcessor(int size, String in, int datanum) {

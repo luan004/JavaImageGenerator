@@ -1,15 +1,15 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Generation {
-    static void newgen(int size, ArrayList<int[][]> data, int round) {
+    static File newgen(int size, ArrayList<int[][]> data, int round) {
         int[][] output = new int[size][size];
 
         for (int y = 0; y < output.length; y++) {
             for (int x = 0; x < output[0].length; x++) {
-
                 ArrayList<Integer> pixels = new ArrayList<>();
                 ArrayList<Integer> pixels2 = new ArrayList<>();
 
@@ -24,9 +24,9 @@ public class Generation {
             }
         }
 
-        Files.createImage(output, size);
+        return Files.createImage(output, size);
     }
-    static void gen(int size, ArrayList<int[][]> data) {
+    static File gen(int size, ArrayList<int[][]> data) {
         int[][] output = new int[size][size];
 
         for (int y = 0; y < output.length; y++) {
@@ -55,9 +55,9 @@ public class Generation {
             }
         }
 
-        Files.createImage(output, size);
+        return Files.createImage(output, size);
     }
-    static void overlay(int size, ArrayList<int[][]> data) {
+    static File overlay(int size, ArrayList<int[][]> data) {
         int[][] output = new int[size][size];
 
         for (int y = 0; y < output.length; y++) {
@@ -72,7 +72,6 @@ public class Generation {
                 output[y][x] = Util.colorMix(pixels);
             }
         }
-
-        Files.createImage(output, size);
+        return Files.createImage(output, size);
     }
 }
