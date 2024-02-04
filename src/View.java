@@ -1,9 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class View{
-    private JTextField input = new JTextField("src/data/cars");
-    private JTextField output = new JTextField("src/output");
+    private JTextField input = new JTextField(System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "dataset");
+    private JTextField output = new JTextField("../src/output");
     private JComboBox<String> gentype = new JComboBox<>(new String[] {"newgen", "overlay", "gen"});
     private JSpinner imgsize = new JSpinner(new SpinnerNumberModel(1024, 0, 4096, 1));
     private JSpinner round = new JSpinner(new SpinnerNumberModel(15, 0, 255, 1));

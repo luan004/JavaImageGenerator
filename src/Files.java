@@ -19,7 +19,7 @@ public class Files {
         }
 
         long timestamp = System.currentTimeMillis();
-        File outputFile = new File("src/output/-" + timestamp + ".jpg");
+        File outputFile = new File("src" + File.separator + "output" + File.separator + "-" + timestamp + ".jpg");
         try {
             ImageIO.write(image, "jpg", outputFile);
             //System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
@@ -31,7 +31,7 @@ public class Files {
     }
 
     static ArrayList<int[][]> dataProcessor(int size, String in, int datanum) {
-        File path = new File(System.getProperty("user.dir") + File.separator + in);
+        File path = new File(in);
 
         ArrayList<int[][]> images = new ArrayList<>();
 

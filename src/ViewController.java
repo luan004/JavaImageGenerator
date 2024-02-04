@@ -8,7 +8,7 @@ public class ViewController extends JFrame {
     private ImageIcon image;
     public void View() {
         setTitle("Java Image Generator");
-        setSize(800, 500);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(800, 500));
@@ -28,6 +28,7 @@ public class ViewController extends JFrame {
     public ViewController(View view) {
         this.view = view;
         this.image = new ImageIcon("src/output/-1707078643011.jpg");
+        this.view.getOutput().setEnabled(false);
         View();
     }
     private JComponent createOptions () {
@@ -141,7 +142,13 @@ public class ViewController extends JFrame {
         return sidebar;
     }
     private JLabel createImageLabel() {
-        return new JLabel(image);
+
+        Image img = image.getImage();
+        Image newimg = img.getScaledInstance(500, 500,  java.awt.Image.SCALE_SMOOTH);
+        image = new ImageIcon(newimg);
+
+
+        return new JLabel(this.image);
     }
     public void updateImageLabel(ImageIcon newImage) {
         image = newImage;
@@ -155,6 +162,7 @@ public class ViewController extends JFrame {
     }
     private JComponent createImage() {
         JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new BorderLayout());
         imagePanel.add(createImageLabel());
         return imagePanel;
     }
