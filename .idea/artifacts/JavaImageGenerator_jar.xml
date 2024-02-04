@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JavaImageGenerator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaImageGenerator_jar</output-path>
+    <root id="archive" name="JavaImageGenerator.jar">
+      <element id="module-output" name="JavaImageGenerator" />
+    </root>
+  </artifact>
+</component>
