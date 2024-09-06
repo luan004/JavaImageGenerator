@@ -19,10 +19,13 @@ public class Files {
         }
 
         long timestamp = System.currentTimeMillis();
-        File outputFile = new File("src" + File.separator + "output" + File.separator + "-" + timestamp + ".jpg");
+
+        File outputFile = new File(System.getProperty("user.home") + "/output/" + timestamp + ".jpg");
+
+//        File outputFile = new File("src" + File.separator + "output" + File.separator + "-" + timestamp + ".jpg");
         try {
             ImageIO.write(image, "jpg", outputFile);
-            //System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
+            System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

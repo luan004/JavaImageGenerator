@@ -18,10 +18,10 @@ public class ViewController extends JFrame {
                 BorderLayout.WEST
         );
 
-        add(
-                createImage(),
-                BorderLayout.CENTER
-        );
+//        add(
+//                createImage(),
+//                BorderLayout.CENTER
+//        );
 
         setVisible(true);
     }
