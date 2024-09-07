@@ -1,14 +1,25 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Files {
     static File createImage(int[][] output, int size) {
+
+        Properties prop = new Properties();
+        try {
+            FileInputStream settingsFile = new FileInputStream("settings.config");
+            prop.load(settingsFile);
+
+            final String OUTPUT_PATH = prop.getProperty("OUTPATH_PATH");
+
+
+        } catch (IOException ex) {
+            System.err.println("File not found");
+        }
+
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < size; y++) {
@@ -17,6 +28,7 @@ public class Files {
                 image.setRGB(x, y, rgb);
             }
         }
+
 
         long timestamp = System.currentTimeMillis();
 

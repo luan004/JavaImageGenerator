@@ -1,32 +1,58 @@
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
-//        View view = new View();
-//        new ViewController(view);
 
+        Properties prop = new Properties();
+        try {
+            FileInputStream settingsFile = new FileInputStream("settings.config");
+            prop.load(settingsFile);
 
-        String in = "/home/luan/dataset/faces";
-        String out = "../src/output";
-        String gentype = "gen";
-        int imgsize = 1024;
-        int round = (int) 24;
-        int inputCount = 4;
-        int outputCount = 2;
+            final String INPUT_PATH = prop.getProperty("INPUT_PATH");
+            final String GEN_TYPE = prop.getProperty("GEN_TYPE");
+            final int IMG_SIZE = Integer.parseInt(prop.getProperty("IMG_SIZE"));
+            final int ROUND = Integer.parseInt(prop.getProperty("ROUND"));
+            final int INPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("INPUT_IMG_COUNT"));
+            final int OUTPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("OUTPUT_PATH_COUNT"));
 
-        for (int i = 0; i < outputCount; i++) {
-            ArrayList<int[][]> data = Files.dataProcessor(imgsize, in, inputCount);
+            run(
+                    INPUT_PATH,
+                    GEN_TYPE,
+                    IMG_SIZE,
+                    ROUND,
+                    INPUT_IMG_COUNT,
+                    OUTPUT_IMG_COUNT
+            );
+
+        } catch (IOException ex) {
+            System.err.println("File not found");
+        }
+    }
+
+    private static void run(
+            final String INPUT_PATH,
+            final String GEN_TYPE,
+            final int IMG_SIZE,
+            final int ROUND,
+            final int INPUT_IMG_COUNT,
+            final int OUTPUT_IMG_COUNT
+    ) {
+        for (int i = 0; i < OUTPUT_IMG_COUNT; i++) {
+            ArrayList<int[][]> data = Files.dataProcessor(IMG_SIZE, INPUT_PATH, INPUT_IMG_COUNT);
             File file;
-            switch (gentype) {
+            switch (GEN_TYPE) {
                 case "overlay":
-                    file = Generation.overlay(imgsize, data);
+                    file = Generation.overlay(IMG_SIZE, data);
                     break;
                 case "gen":
-                    file = Generation.gen(imgsize, data);
+                    file = Generation.gen(IMG_SIZE, data);
                     break;
                 case "newgen":
-                    file = Generation.newgen(imgsize, data, round);
+                    file = Generation.newgen(IMG_SIZE, data, ROUND);
                     break;
             }
         }
