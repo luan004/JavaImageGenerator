@@ -24,7 +24,7 @@ public class Generation {
             }
         }
 
-        return Files.createImage(output, size);
+        return Files.writeImage(output, size);
     }
     static File gen(int size, ArrayList<int[][]> data) {
         int[][] output = new int[size][size];
@@ -55,7 +55,7 @@ public class Generation {
             }
         }
 
-        return Files.createImage(output, size);
+        return Files.writeImage(output, size);
     }
     static File overlay(int size, ArrayList<int[][]> data) {
         int[][] output = new int[size][size];
@@ -72,6 +72,6 @@ public class Generation {
                 output[y][x] = Util.colorMix(pixels);
             }
         }
-        return Files.createImage(output, size);
+        return Files.writeImage(output, size);
     }
 }

@@ -19,7 +19,7 @@ public class ViewController extends JFrame {
         );
 
 //        add(
-//                createImage(),
+//                writeImage(),
 //                BorderLayout.CENTER
 //        );
 

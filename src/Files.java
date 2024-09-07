@@ -6,20 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class Files {
-    static File createImage(int[][] output, int size) {
+    static File writeImage(int[][] output, int size) {
 
-        Properties prop = new Properties();
-        try {
-            FileInputStream settingsFile = new FileInputStream("settings.config");
-            prop.load(settingsFile);
-
-            final String OUTPUT_PATH = prop.getProperty("OUTPATH_PATH");
-
-
-        } catch (IOException ex) {
-            System.err.println("File not found");
-        }
-
+        File outputFile = createFile();
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < size; y++) {
@@ -29,20 +18,29 @@ public class Files {
             }
         }
 
-
-        long timestamp = System.currentTimeMillis();
-
-        File outputFile = new File(System.getProperty("user.home") + "/output/" + timestamp + ".jpg");
-
-//        File outputFile = new File("src" + File.separator + "output" + File.separator + "-" + timestamp + ".jpg");
         try {
             ImageIO.write(image, "jpg", outputFile);
             System.out.println("Imagem gerada com sucesso: " + outputFile.getAbsolutePath());
+            return outputFile;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
+    }
 
-        return outputFile;
+    static File createFile() {
+        try {
+            Properties prop = new Properties();
+            FileInputStream settingsFile = new FileInputStream("settings.config");
+            prop.load(settingsFile);
+
+            final String OUTPUT_PATH = prop.getProperty("OUTPATH_PATH");
+
+            return new File(OUTPUT_PATH + "/" + System.currentTimeMillis() + ".jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     static ArrayList<int[][]> dataProcessor(int size, String in, int datanum) {

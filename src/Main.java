@@ -17,7 +17,7 @@ public class Main {
             final int IMG_SIZE = Integer.parseInt(prop.getProperty("IMG_SIZE"));
             final int ROUND = Integer.parseInt(prop.getProperty("ROUND"));
             final int INPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("INPUT_IMG_COUNT"));
-            final int OUTPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("OUTPUT_PATH_COUNT"));
+            final int OUTPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("OUTPUT_IMG_COUNT"));
 
             run(
                     INPUT_PATH,
