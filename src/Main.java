@@ -54,6 +54,8 @@ public class Main {
                 case "newgen":
                     file = Generation.newgen(OUTPUT_IMG_SIZE, data, ROUND);
                     break;
+                case "gen2":
+                    file = Generation.gen2(OUTPUT_IMG_SIZE, data, ROUND);
             }
         }
     }

@@ -1,6 +1,63 @@
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Util {
+
+    static int getMixedColors(ArrayList<Integer> pixels) {
+        float totalH = 0, totalS = 0, totalV = 0;
+        float totalX = 0, totalY = 0;
+
+        for (Integer pixel : pixels) {
+            float[] hsv = rgbToHsv(pixel);
+
+            // Para Hue, converte para coordenadas cartesianas e acumula
+            double hueRadians = Math.toRadians(hsv[0] * 360); // Converte Hue para radianos
+            totalX += Math.cos(hueRadians);  // x = cos(Hue)
+            totalY += Math.sin(hueRadians);  // y = sin(Hue)
+
+            // Para Saturation e Value, soma diretamente
+            totalS += hsv[1];
+            totalV += hsv[2];
+        }
+
+        // Média de Hue em coordenadas polares
+        float avgH = (float) Math.toDegrees(Math.atan2(totalY, totalX)); // Converte de volta para graus
+        if (avgH < 0) avgH += 360;  // Ajusta para garantir que esteja no intervalo [0, 360]
+        avgH /= 360;  // Normaliza o Hue para o intervalo [0, 1]
+
+        // Média de Saturation e Value
+        int count = pixels.size();
+        float avgS = totalS / count;
+        float avgV = totalV / count;
+
+        // Converte a cor média de HSV de volta para um int RGB
+        return hsvToRgb(avgH, avgS, avgV);
+    }
+
+    private static float[] rgbToHsv(int rgb) {
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = rgb & 0xFF;
+
+        float[] hsv = new float[3];
+        Color.RGBtoHSB(r, g, b, hsv);  // Usa função padrão do Java para converter RGB para HSV
+        return hsv;
+    }
+
+    // Função para converter HSV de volta para um int RGB
+    private static int hsvToRgb(float h, float s, float v) {
+        // Converte HSV para um Color e extrai o int RGB
+        int rgb = Color.HSBtoRGB(h, s, v);
+        return rgb;
+    }
+
+
+
+
+
+
+
     static int colorMix(ArrayList<Integer> pixelsColor) {
         int r = 0;
         int g = 0;
@@ -46,7 +103,7 @@ public class Util {
                 int color2 = sortedColors.get(j).getKey();
 
                 if (colorDistance(color1, color2) <= tol) {
-                    // Se as cores são suficientemente próximas, considera como uma única cor
+                    // Se as cores são suficientemente próximas, considera como uma mesma cor
                     return color1;
                 }
             }

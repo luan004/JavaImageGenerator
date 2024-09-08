@@ -11,14 +11,12 @@ public class Generation {
         for (int y = 0; y < output.length; y++) {
             for (int x = 0; x < output[0].length; x++) {
                 ArrayList<Integer> pixels = new ArrayList<>();
-                ArrayList<Integer> pixels2 = new ArrayList<>();
 
                 for (var image: data) {
-                    pixels.add(image[y][x]);
-                    pixels2.add(Util.roundColor(image[y][x], round));
+                    pixels.add(Util.roundColor(image[y][x], round));
                 }
 
-                int predominant = Util.getPredominantColor(pixels2);
+                int predominant = Util.getPredominantColor(pixels);
 
                 output[y][x] = predominant;
             }
@@ -52,6 +50,26 @@ public class Generation {
                 pixels.add(predominante);
 
                 output[y][x] = Util.colorMix(pixels);
+            }
+        }
+
+        return Files.writeImage(output, size);
+    }
+    static File gen2(int size, ArrayList<int[][]> data, int round) {
+        int[][] output = new int[size][size];
+
+        for (int y = 0; y < output.length; y++) {
+            for (int x = 0; x < output[0].length; x++) {
+
+                ArrayList<Integer> pixels = new ArrayList<>();
+
+                for (var image: data) {
+                    pixels.add(Util.roundColor(image[y][x], round));
+                }
+
+                int predominant = Util.getMixedColors(pixels);
+
+                output[y][x] = predominant;
             }
         }
 

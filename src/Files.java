@@ -63,7 +63,14 @@ public class Files {
             if (files.length != 0) {
                 assert files != null;
                 for (File file: randomFiles) {
-                    if (file.isFile() && (file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".jpeg"))) {
+                    if (
+                        file.isFile() &&
+                            (
+                                file.getName().toLowerCase().endsWith(".jpg") ||
+                                file.getName().toLowerCase().endsWith(".jpeg") ||
+                                file.getName().toLowerCase().endsWith(".png"))
+                            )
+                    {
                         try {
                             BufferedImage image = ImageIO.read(file);
 
