@@ -14,7 +14,7 @@ public class Main {
 
             final String INPUT_PATH = prop.getProperty("INPUT_PATH");
             final String GEN_TYPE = prop.getProperty("GEN_TYPE");
-            final int IMG_SIZE = Integer.parseInt(prop.getProperty("IMG_SIZE"));
+            final int OUTPUT_IMG_SIZE = Integer.parseInt(prop.getProperty("OUTPUT_IMG_SIZE"));
             final int ROUND = Integer.parseInt(prop.getProperty("ROUND"));
             final int INPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("INPUT_IMG_COUNT"));
             final int OUTPUT_IMG_COUNT = Integer.parseInt(prop.getProperty("OUTPUT_IMG_COUNT"));
@@ -22,7 +22,7 @@ public class Main {
             run(
                     INPUT_PATH,
                     GEN_TYPE,
-                    IMG_SIZE,
+                    OUTPUT_IMG_SIZE,
                     ROUND,
                     INPUT_IMG_COUNT,
                     OUTPUT_IMG_COUNT
@@ -36,23 +36,23 @@ public class Main {
     private static void run(
             final String INPUT_PATH,
             final String GEN_TYPE,
-            final int IMG_SIZE,
+            final int OUTPUT_IMG_SIZE,
             final int ROUND,
             final int INPUT_IMG_COUNT,
             final int OUTPUT_IMG_COUNT
     ) {
         for (int i = 0; i < OUTPUT_IMG_COUNT; i++) {
-            ArrayList<int[][]> data = Files.dataProcessor(IMG_SIZE, INPUT_PATH, INPUT_IMG_COUNT);
+            ArrayList<int[][]> data = Files.dataProcessor(OUTPUT_IMG_SIZE, INPUT_PATH, INPUT_IMG_COUNT);
             File file;
             switch (GEN_TYPE) {
                 case "overlay":
-                    file = Generation.overlay(IMG_SIZE, data);
+                    file = Generation.overlay(OUTPUT_IMG_SIZE, data);
                     break;
                 case "gen":
-                    file = Generation.gen(IMG_SIZE, data);
+                    file = Generation.gen(OUTPUT_IMG_SIZE, data);
                     break;
                 case "newgen":
-                    file = Generation.newgen(IMG_SIZE, data, ROUND);
+                    file = Generation.newgen(OUTPUT_IMG_SIZE, data, ROUND);
                     break;
             }
         }

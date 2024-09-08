@@ -43,55 +43,66 @@ public class Files {
         }
     }
 
-    static ArrayList<int[][]> dataProcessor(int size, String in, int datanum) {
-        File path = new File(in);
+    static ArrayList<int[][]> dataProcessor(
+            final int OUTPUT_IMG_SIZE,
+            final String INPUT_PATH,
+            final int INPUT_IMG_COUNT
+    ) {
+        File path = new File(INPUT_PATH);
 
         ArrayList<int[][]> images = new ArrayList<>();
 
-        if (path.isDirectory()) {
+        try {
+            // emaralhar dataset e selecionar as imagens que serão utilizadas
             File[] files = path.listFiles();
             List<File> fileList = Arrays.asList(files);
             Collections.shuffle(fileList);
-            List<File> randomFiles = fileList.subList(0, Math.min(datanum, fileList.size()));
+            List<File> randomFiles = fileList.subList(0, Math.min(INPUT_IMG_COUNT, fileList.size()));
 
+            // pasta vazia
             if (files.length != 0) {
                 assert files != null;
                 for (File file: randomFiles) {
                     if (file.isFile() && (file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".jpeg"))) {
                         try {
                             BufferedImage image = ImageIO.read(file);
-                            if (image != null && image.getWidth() == size && image.getHeight() == size) {
 
-                                int[][] processedImage = new int[size][size];
+                            int[][] processedImage = new int[OUTPUT_IMG_SIZE][OUTPUT_IMG_SIZE];
 
-                                for (int y = 0; y < size; y++) {
-                                    for (int x = 0; x < size; x++) {
-                                        // Armazena a cor no array
-                                        processedImage[y][x] = image.getRGB(x, y);
+                            for (int y = 0; y < image.getHeight(); y++) {
+                                for (int x = 0; x < image.getWidth(); x++) {
+
+                                    int yCentered = (OUTPUT_IMG_SIZE - image.getHeight()) / 2;
+                                    int xCentered = (OUTPUT_IMG_SIZE - image.getWidth()) / 2;
+
+                                    int yOutOfBound = yCentered;
+                                    int xOutOfBound = xCentered;
+
+
+                                    if (yCentered < 0) {
+                                        yCentered = 0;
                                     }
-                                }
-                                images.add(processedImage);
+                                    if (xCentered < 0) {
+                                        xCentered = 0;
+                                    }
 
-                            } else {
-                                System.err.println("A imagem '" + file.getName() + "' está corrompida ou não tem tamanho " + size + "x" + size);
-                                System.exit(0);
+                                    // Armazena a cor no array
+                                    processedImage[yCentered + y][xCentered + x] = image.getRGB(x, y);
+                                }
                             }
+                            images.add(processedImage);
                         } catch (IOException e) {
-                            System.out.println("Houve um problema ao tentar ler a imagem '" + file.getName());
-                            System.exit(0);
+                            System.out.println("ERROR: failed when trying to process image '" + file.getName() + "'");
                         }
                     } else {
-                        System.err.println("O arquivo '" + file.getName() + "' não é uma imagem jpg");
-                        System.exit(0);
+                        System.err.println("ERROR: the file '" + file.getName() + "' is not a jpg image");
                     }
                 }
             } else {
-                System.err.println("A pasta " + path.getName() + " está vazia");
-                System.exit(0);
+                System.err.println("ERROR: empty directory (" + path.getAbsolutePath() + ")");
             }
-        } else {
-            System.err.println("Diretório não encontrado: " + path);
-            System.exit(0);
+        } catch (NullPointerException e) {
+            System.err.println("ERROR: dataset directory not found");
         }
 
         return images;
