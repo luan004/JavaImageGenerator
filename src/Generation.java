@@ -64,7 +64,8 @@ public class Generation {
                 ArrayList<Integer> pixels = new ArrayList<>();
 
                 for (var image: data) {
-                    pixels.add(Util.roundColor(image[y][x], round));
+                    //pixels.add(Util.roundColor(image[y][x], round));
+                    pixels.add(image[y][x]);
                 }
 
                 int predominant = Util.getMixedColors(pixels);
