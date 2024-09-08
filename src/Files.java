@@ -69,25 +69,32 @@ public class Files {
 
                             int[][] processedImage = new int[OUTPUT_IMG_SIZE][OUTPUT_IMG_SIZE];
 
-                            for (int y = 0; y < image.getHeight(); y++) {
-                                for (int x = 0; x < image.getWidth(); x++) {
+                            for (int y = 0; y < OUTPUT_IMG_SIZE; y++) {
+                                for (int x = 0; x < OUTPUT_IMG_SIZE; x++) {
 
                                     int yCentered = (OUTPUT_IMG_SIZE - image.getHeight()) / 2;
                                     int xCentered = (OUTPUT_IMG_SIZE - image.getWidth()) / 2;
 
-                                    int yOutOfBound = yCentered;
-                                    int xOutOfBound = xCentered;
-
+                                    int finalX = x;
+                                    int finalY = y;
 
                                     if (yCentered < 0) {
+                                        finalY = (yCentered * -1) + y;
                                         yCentered = 0;
                                     }
+
                                     if (xCentered < 0) {
+                                        finalX = (xCentered * -1) + x;
                                         xCentered = 0;
                                     }
 
-                                    // Armazena a cor no array
-                                    processedImage[yCentered + y][xCentered + x] = image.getRGB(x, y);
+                                    processedImage[yCentered + y][xCentered + x] = image.getRGB(finalX, finalY );
+                                    if (x == image.getWidth()-1) {
+                                        x = OUTPUT_IMG_SIZE;
+                                    }
+                                }
+                                if (y == image.getHeight()-1) {
+                                    y = OUTPUT_IMG_SIZE;
                                 }
                             }
                             images.add(processedImage);
